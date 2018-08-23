@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<link href="css/reset.min.css" rel="stylesheet" type="text/css">
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+	<title>Untitled Document</title>
+</head>
+
+<body>
+	<div class="box_right">
+		<div class="tit f_bold">
+			<img alt="icon" src="image/icon.gif"> 사원 기본 정보 수정
+		</div>
+		<div class="page_menu f_bold">
+			<ul class="li_left">
+				<li>
+					<a href="#">교육정보</a>
+				</li>
+				<li>|</li>
+				<li>
+					<a href="#">자격증. 보유기술정보</a>
+				</li>
+				<li>|</li>
+				<li>
+					<a href="#">프로젝트 정보</a>
+				</li>
+				<li>|</li>
+				<li>
+					<a href="#">경력정보</a>
+				</li>
+				<li>|</li>
+				<li>
+					<a href="#">근무정보</a>
+				</li>
+			</ul>
+		</div>
+		<form action="" method="get" id="update_form">
+
+		</form>
+	</div>
+
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="common/common.js"></script>
+
+
+	<script>
+
+		 var link = document.location.href.split("?")[1];
+		 console.log(link)
+
+		$.ajax({
+
+			type: "GET",
+
+			url: serverRoot + "/json/worker/" + link,
+
+			dataType: "JSON", // 옵션이므로 JSON으로 받을게 아니면 안써도 됨
+
+			success: function (data) {
+				let sex = null;
+				let joinStyle = null;
+				let jumin = data.juminNo.split('-')
+				let birthY = data.birthYMD.substr(0, 2)
+				let birthM = data.birthYMD.substr(2, 2)
+				let birthD = data.birthYMD.substr(4, 2)
+				let tel1 = data.tel.substring(0, 3)
+				let tel2 = data.tel.substring(3, 7)
+				let tel3 = data.tel.substring(7, 11)
+
+				$('#update_form').append(
+					"<div class='page_box'>" +
+					"<div class='page_in float_h'>" +
+					"<div class='picture_pr float_l'><img alt='증명사진' src=''></div>" +
+					"<div class='page_mar2 float_l'>" +
+					"<div class='page_mar1'>" +
+					"<label class='page4_1'>한글이름 : </label>" +
+					"<input id='koNames' type='text' name='textfield4' value='" + data.koName + "'>" +
+					"</div>" +
+					"<div class='page_mar1'>" +
+					"<label class='page4_1'>영문이름 : </label>" +
+					"<input id='enNames' type='text' name='textfield22' value='" + data.enName + "' >" +
+					"</div>" +
+					"<div class='page_mar1'>" +
+					"<label class='page4_1'>한문이름: </label>" +
+					"<input id='cnNames' type='text' name='textfield34' value='" + data.cnName + "' >" +
+					"</div>" +
+					"<div class='page_mar1'>" +
+					"<label class='page4_1'>주민등록번호 : </label>" +
+					"<input id='jumin1' name='textfield323' type='text' size='6' maxlength='6' value='" + jumin[0] +
+					"' > - <input id='jumin2' name='textfield3222' type='text' size='7' maxlength='7' value='" + jumin[1] + "' >" +
+					"</div>" +
+					"</div>" +
+					"</div>" +
+					"<div class='page_in clear_b'>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>사진파일명 : </label>" +
+					"<input id='photos' name='textfield33' type='text' size='40' value='" + data.photoName +
+					"' > <font color='#FF0000'><img src='image/bt_search.gif' width='49' height='18'></font>" +
+					"</div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>생년월일 : </label>" +
+					"<input id='birthYs' name='textfield332' type='text' size='8'  value='" + birthY +
+					"'> 년 <input id='birthMs' name='textfield3322' type='text' size='5'  value='" + birthM +
+					"'> 월 <input id='birthDs' name='textfield33222' type='text' size='5'  value='" + birthD +
+					"'> 일 ( <input id='birth_1' type='radio' name='radiobutton1' value='1'> 양력 <input id='birth_2' type='radio' name='radiobutton1' value='2'> 음력 )" +
+					"</div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>성별 : </label>" +
+					"<input id='sex_1' type='radio' name='radiobutton2' value='1'> 남자 <input id='sex_2'  type='radio' name='radiobutton2' value='2'> 여자 </div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>결혼유무 : </label>" +
+					"<input id='marry_0' type='radio' name='radiobutton3' value='0'> 미혼 <input id='marry_1' type='radio' name='radiobutton3' value='1'> 기혼 </div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>년차 : </label>" +
+					"<input id='workYears' name='textfield3323' type='text' size='10'  value='" + data.workYear + "'>" +
+					"</div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>급여 지급유형 : </label>" +
+					"<select name='select'>" +
+					"<option>월급</option>" +
+					"</select>" +
+					"</div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>희망직무 : </label>" +
+					"<select id='work' name='select2'>" +
+					"<option value='0'>SI</option>" +
+					"<option value='1'>SM</option>" +
+					"</select>" +
+					"</div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>입사유형 : </label>" +
+					"<select id='join' name='select4'>" +
+					"<option value='0'>정규직</option>" +
+					"<option value='1'>계약직</option>" +
+					"</select>" +
+					"</div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>주소 : </label>" +
+					"<input  name='textfield3324' type='text' size='10'> <input id='addr' name='textfield333' type='text' size='40'  value='" +
+					data.address + "'>" +
+					"</div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>연락처 : </label>" +
+					"<input id='tel_1' name='textfield33242' type='text' size='10'  value='" + tel1 +
+					"'> - <input id='tel_2' name='textfield332422' type='text' size='10'  value='" + tel2 +
+					"'> - <input id='tel_3' name='textfield332423' type='text' size='10'  value='" + tel3 + "'>" +
+					"</div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>이메일 : </label>" +
+					"<input id='email'name='textfield332424' type='text' size='20'  value='" + data.email + "'>" +
+					"</div>" +
+					"<div class='page_line page_mar1'>" +
+					"<label class='page4_1'>기술등급 : </label>" +
+					"<input id='tech' name='textfield3324242' type='text' size='20'  value='" + data.tech + "'>" +
+					"</div>" +
+					"<div class='page_mar1'>" +
+					"<label class='page4_1'>주량 : </label>" +
+					"<input id='alcohol' name='textfield33242422' type='text' size='20'  value='" + data.alcohol + "'>" +
+					"</div>" +
+					"</div>" +
+					"<div class='btn_all'>" +
+					"<button id='submitBtn' type='button'><img alt='remove' src='image/bt_remove.gif'></button>" +
+					"<button type='reset'><img alt='cancel' src='image/bt_cancel.gif'></button>" +
+					"</div>" +
+					"</div>"
+				)
+				if (data.sex == 1) {
+					$('#sex_1').click()
+				}
+				if (data.sex == 2) {
+					$('#sex_2').click()
+				}
+				if (data.marry == 0) {
+					$('#marry_0').click()
+				}
+				if (data.marry == 1) {
+					$('#marry_1').click()
+				}
+				if (data.hopeWork == 0) {
+					$("#work").val("0");
+				}
+				if (data.hopeWork == 1) {
+					$("#work").val("1");
+				}
+
+				if (data.joinStyle == 0) {
+					$("#join").val("0");
+				}
+				if (data.joinStyle == 1) {
+					$("#join").val("1");
+				}
+				if (data.birthRN == 1) {
+					$("#birth_1").click();
+				}
+				if (data.birthRN == 2) {
+					$("#birth_2").click();
+				}
+
+				$('#submitBtn').click(function () {
+
+					var params = {
+						no: link,
+						koName: $('#koNames').val(),
+						enName: $('#enNames').val(),
+						cnName: $('#cnNames').val(),
+						juminNo: $('#jumin1').val() + "-" + $('#jumin2').val(),
+						photoName: $('#photos').val(),
+						birthYMD: $('#birthYs').val() + $('#birthMs').val() + $('#birthDs').val(),
+						birthRN: $('input:radio[name="radiobutton1"]:checked').val(),
+						sex: $('input:radio[name="radiobutton2"]:checked').val(),
+						marry: $('input:radio[name="radiobutton3"]:checked').val(),
+						workYear: $('#workYears').val(),
+						hopeWork: $("#work option:selected").val(),
+						joinStyle: $("#join option:selected").val(),
+						address: $("#addr").val(),
+						tel: $('#tel_1').val() + $('#tel_2').val() + $('#tel_3').val(),
+						email: $("#email").val(),
+						tech: $("#tech").val(),
+						alcohol: $("#alcohol").val(),
+					}
+
+					$.ajax({
+
+						type: "POST",
+
+						url: serverRoot + "/json/worker/update",
+
+						data: params,
+
+						dataType: "JSON", // 옵션이므로 JSON으로 받을게 아니면 안써도 됨
+
+						success: function (data) {
+							console.log(data)
+							alert("수정완료")
+							history.back();
+						},
+						error: function (data) {
+							console.log(data)
+						}
+					})
+				})
+
+			}
+
+
+
+
+		})
+	</script>
+</body>
+
+</html>
